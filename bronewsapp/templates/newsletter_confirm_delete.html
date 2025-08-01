@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Confirm Delete Newsletter{% endblock %}
+
+{% block content %}
+    <div class="confirm-delete-container">
+        <h2>Confirm Delete Newsletter</h2>
+        <p>Are you sure you want to delete the newsletter titled: "<strong>{{ newsletter.title }}</strong>"?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            <a href="{% url 'newsletter_detail' pk=newsletter.pk %}" class="btn btn-secondary">No, Cancel</a>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}{{ action }}{% endblock %}
+
+{% block content %}
+    <div class="newsletter-form-container">
+        <h2>{{ action }}</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">{{ action }}</button>
+        </form>
+        <p>
+            {% if form.instance.pk %}
+                <a href="{% url 'newsletter_detail' pk=form.instance.pk %}">Cancel</a>
+            {% else %}
+                <a href="{% url 'newsletter_list' %}">Cancel</a>
+            {% endif %}
+        </p>
+    </div>
+{% endblock %}

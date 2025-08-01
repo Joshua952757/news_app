@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Newsletter List{% endblock %}
+
+{% block content %}
+    <div class="newsletter-list">
+        <h2>All Newsletters</h2>
+        {% if request.user.is_authenticated and request.user.profile.role == "JOURNALIST" %}
+            <p><a href="{% url 'newsletter_create' %}">Create New Newsletter</a></p>
+        {% endif %}
+
+        {% if newsletters %}
+            <ul>
+                {% for newsletter in newsletters %}
+                    <li>
+                        <a href="{% url 'newsletter_detail' pk=newsletter.pk %}">{{ newsletter.title }}</a> 
+                        (by {{ newsletter.author.username }})
+                        {% if newsletter.publisher %} - {{ newsletter.publisher.name }}{% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No newsletters found.</p>
+        {% endif %}
+    </div>
+{% endblock %}

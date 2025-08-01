@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Journalist: {{ journalist.username }}{% endblock %}
+
+{% block content %}
+    <div class="journalist-detail">
+        <h2>{{ journalist.username }}</h2>
+        <p>Role: {{ journalist.profile.role }}</p>
+        {% if journalist.profile.publisher %}
+            <p>Associated Publisher: <a href="{% url 'publisher_detail' journalist.profile.publisher.id %}">{{ journalist.profile.publisher.name }}</a></p>
+        {% endif %}
+
+        {% if request.user.is_authenticated and request.user.profile.role == "READER" %}
+            <form action="{% url 'subscribe_journalist' user_id=journalist.pk %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                {% if is_subscribed %}
+                    <button type="submit" class="btn btn-warning">Unsubscribe from Journalist</button>
+                {% else %}
+                    <button type="submit" class="btn btn-primary">Subscribe to Journalist</button>
+                {% endif %}
+            </form>
+        {% else %}
+            {% if not request.user.is_authenticated %}
+                <p><a href="{% url 'login' %}">Log in</a> as a Reader to subscribe to this journalist.</p>
+            {% else %}
+                <p>Only readers can subscribe to journalists.</p>
+            {% endif %}
+        {% endif %}
+
+        <hr>
+        <h3>Articles by {{ journalist.username }}</h3>
+        <p>Articles go here...</p> 
+
+        <h3>Newsletters by {{ journalist.username }}</h3>
+        <p>Newsletters go here...</p>
+
+        <p><a href="{% url 'home' %}">Back to Home</a></p>
+    </div>
+{% endblock %}

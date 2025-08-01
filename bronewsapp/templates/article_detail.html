@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block content %}
+    <div class="article-detail">
+        <h2>{{ article.title }}</h2>
+        <p><strong>Author:</strong> {{ article.author.username }}</p>
+        <p><strong>Publisher:</strong> 
+            {% if article.publisher %}
+                <a href="{% url 'publisher_detail' article.publisher.id %}">{{ article.publisher.name }}</a>
+            {% else %}
+                N/A
+            {% endif %}
+        </p>
+        <p><strong>Status:</strong> {% if article.is_approved %}Approved{% else %}Pending Review{% endif %}</p>
+        <hr>
+        <div class="article-content">
+            {{ article.content|linebreaksbr }}
+        </div>
+
+        <div class="article-actions">
+            {% if request.user.is_authenticated and request.user.profile %}
+                {% if request.user == article.author or request.user.profile.role == "EDITOR" %}
+                    <p>
+                        <a href="{% url 'article_update' pk=article.pk %}">Edit Article</a> |
+                        <a href="{% url 'article_delete' pk=article.pk %}">Delete Article</a>
+                    </p>
+                {% endif %}
+            {% endif %}
+
+            {% if request.user.is_authenticated and request.user.profile and request.user.profile.role == "EDITOR" and not article.is_approved %}
+                <form action="{% url 'article_approve' pk=article.pk %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success">Approve Article</button>
+                </form>
+                <br>
+            {% endif %}
+
+            <p><a href="{% url 'article_list' %}">Back to Articles</a></p>
+        </div>
+    </div>
+{% endblock %}

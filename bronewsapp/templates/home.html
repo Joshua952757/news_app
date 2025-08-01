@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Home</h1>
+{{request.user.profile.role}}
+<a href="{% url 'login' %}">Login</a>
+<a href="{% url 'publisher_list' %}">Checkout our publishers!</a>
+
+    <p>
+        <a href="{% url 'journalist_dashboard' %}">Go to Journalist Dashboard</a>
+    </p>
+
+        <p>
+        <a href="{% url 'editor_dashboard' %}">Go to Editor Dashboard</a>
+    </p>
+
+    <p>
+        <a href="{% url 'admin_dashboard' %}">Go to Admin Dashboard</a>
+    </p>
+{% endblock content %}

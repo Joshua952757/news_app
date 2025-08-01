@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}{{ newsletter.title }}{% endblock %}
+
+{% block content %}
+    <div class="newsletter-detail">
+        <h2>{{ newsletter.title }}</h2>
+        <p><strong>Author:</strong> {{ newsletter.author.username }}</p>
+        <p><strong>Publisher:</strong> 
+            {% if newsletter.publisher %}
+                <a href="{% url 'publisher_detail' newsletter.publisher.id %}">{{ newsletter.publisher.name }}</a>
+            {% else %}
+                N/A
+            {% endif %}
+        </p>
+        <p><strong>Status:</strong> {% if newsletter.is_approved %}Approved{% else %}Pending Review{% endif %}</p>
+        <hr>
+        <div class="newsletter-content">
+            {{ newsletter.content|linebreaksbr }}
+        </div>
+
+        <div class="newsletter-actions">
+            {% if request.user.is_authenticated and request.user == newsletter.author and request.user.profile.role == "JOURNALIST" %}
+                <p>
+                    <a href="{% url 'newsletter_update' pk=newsletter.pk %}">Edit Newsletter</a> |
+                    <a href="{% url 'newsletter_delete' pk=newsletter.pk %}">Delete Newsletter</a>
+                </p>
+            {% endif %}
+            <p><a href="{% url 'newsletter_list' %}">Back to Newsletters</a></p>
+        </div>
+    </div>
+{% endblock %}

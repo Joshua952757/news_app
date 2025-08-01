@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}{{ publisher.name }} Page{% endblock %}
+
+{% block content %}
+    <h2>{{ publisher.name }}</h2>
+    <p>Admin: {{ publisher.admin.username }}</p>
+    <p>Description: {{ publisher.content }}</p>
+
+    {% if request.user.is_authenticated and request.user.profile.role == "READER" %}
+        <form action="{% url 'subscribe_publisher' publisher_id=publisher.pk %}" method="post" style="display:inline; margin-bottom: 15px;">
+            {% csrf_token %}
+            {% if is_subscribed %}
+                <button type="submit" class="btn btn-warning">Unsubscribe from Publisher</button>
+            {% else %}
+                <button type="submit" class="btn btn-primary">Subscribe to Publisher</button>
+            {% endif %}
+        </form>
+    {% else %}
+        {% if not request.user.is_authenticated %}
+            <p><a href="{% url 'login' %}">Log in</a> as a Reader to subscribe to this publisher.</p>
+        {% else %}
+            <p>Only readers can subscribe to publishers.</p>
+        {% endif %}
+    {% endif %}
+
+    <h3>Articles by {{ publisher.name }}</h3>
+    {% if articles %}
+        <ul>
+            {% for article in articles %}
+                <li>
+                    {{ article.title }} 
+                    (Author: 
+                    {% if article.author.profile.role == 'JOURNALIST' %}
+                        <a href="{% url 'journalist_detail' user_id=article.author.pk %}">{{ article.author.username }}</a>
+                    {% else %}
+                        {{ article.author.username }}
+                    {% endif %}
+                    )
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No articles found for this publisher.</p>
+    {% endif %}
+
+    <h3>Newsletters by {{ publisher.name }}</h3>
+    {% if newsletters %}
+        <ul>
+            {% for newsletter in newsletters %}
+                <li>
+                    {{ newsletter.title }} 
+                    (Sender: 
+                    {% if newsletter.author.profile.role == 'JOURNALIST' %}
+                        <a href="{% url 'journalist_detail' user_id=newsletter.author.pk %}">{{ newsletter.author.username }}</a>
+                    {% else %}
+                        {{ newsletter.author.username }}
+                    {% endif %}
+                    )
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No newsletters found for this publisher.</p>
+    {% endif %}
+          <p><a href="{% url 'home' %}">Back to Home</a></p>
+{% endblock %}

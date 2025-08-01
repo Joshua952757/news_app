@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Article List{% endblock %}
+
+{% block content %}
+    <div class="article-list">
+        <h2>All Articles</h2>
+        {% if request.user.is_authenticated and request.user.profile.role == "JOURNALIST" or "EDITOR" %}
+            <p><a href="{% url 'article_create' %}">Create New Article</a></p>
+        {% endif %}
+
+        {% if articles %}
+            <ul>
+                {% for article in articles %}
+                    <li>
+                        <a href="{% url 'article_detail' pk=article.pk %}">{{ article.title }}</a> 
+                        (by {{ article.author.username }})
+                        {% if article.publisher %} - {{ article.publisher.name }}{% endif %}
+                        {% if not article.is_approved %} - <span style="color: gray; font-style: italic;">(Pending)</span>{% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No articles found.</p>
+        {% endif %}
+    </div>
+{% endblock %}

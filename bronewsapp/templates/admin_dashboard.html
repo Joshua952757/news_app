@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+    <h2>Admin Dashboard</h2>
+
+    {% if request.user.is_authenticated %}
+        {% if request.user.profile and request.user.profile.role == "ADMIN" %}
+            <p>Welcome, Administrator {{ request.user.username }}!</p>
+
+            <h3>Admin Actions</h3>
+            <ul>
+                <li><a href="{% url 'create_publisher' %}">Create New Publisher</a></li>
+                <li><a href="{% url 'publisher_list' %}">View All Publishers</a></li>
+            </ul>
+
+            <h3>Content Overview</h3>
+            <p>As an admin, you have an overview of all content in the system:</p>
+            <ul>
+                <li><a href="{% url 'article_list' %}">View All Articles</a></li>
+                <li><a href="{% url 'newsletter_list' %}">View All Newsletters</a></li>
+            </ul>
+        {% else %}
+            {# If authenticated but not an ADMIN #}
+            <p class="error-message">You are not authorized to view the admin dashboard.</p>
+            <p>Please return to the <a href="{% url 'home' %}">home page</a>.</p>
+        {% endif %}
+    {% else %}
+        <p class="error-message">Please <a href="{% url 'login' %}">log in</a> to view this dashboard.</p>
+    {% endif %}
+
+{% endblock %}

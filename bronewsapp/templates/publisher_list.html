@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Publisher List{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Our Bro News Publishers</h2>
+    {% if publishers %} 
+        <ul>
+            {% for publisher in publishers %}
+                <li>
+                    <a href="{% url 'publisher_detail' publisher.id %}">{{ publisher.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No publishers available.</p>
+    {% endif %}
+    
+    {% if request.user.is_authenticated and request.user.profile.role == "ADMIN" %}
+        <p><a href="{% url 'create_publisher' %}">Add New Publisher</a></p>
+    {% endif %}
+
+</div>
+{% endblock %}

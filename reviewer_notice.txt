@@ -1,0 +1,8 @@
+Dear Reviewer, I am not using signals or the twitter api for this task as I have implemented the approval logic without it.
+
+Kindly note environ variables above are used to protect sensitive information :).
+You will need to define the environmental variables below in a .env file:
+SECRET_KEY, API_KEY, API_KEY_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET, BEARER_TOKEN
+
+The requirements.txt file contains the project dependencies.
+The additional Admin role handles creation of Publishers, Readers can access articles by viewing the Publishers.

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Journalist Dashboard{% endblock %}
+
+{% block content %}
+    {% if request.user.is_authenticated %} 
+        {% if request.user.profile.role == "JOURNALIST" %}
+            <div class="journalist-dashboard">
+                <h2>Journalist Dashboard</h2>
+                <p>Welcome, Journalist {{ request.user.username }}!</p>
+                
+                <h3>Articles Management</h3>
+                <ul>
+                    <li><a href="{% url 'article_create' %}">Create New Article</a></li>
+                    <li><a href="{% url 'article_list' %}">View My Articles</a></li>
+                </ul>
+
+                <h3>Newsletters Management</h3>
+                <ul>
+                    <li><a href="{% url 'newsletter_create' %}">Create New Newsletter</a></li>
+                    <li><a href="{% url 'newsletter_list' %}">View My Newsletters</a></li>
+                </ul>
+            </div>
+        {% else %}
+            <div class="unauthorized-message">
+                <h2>Access Denied</h2>
+                <p>You do not have the necessary permissions to view this dashboard.</p>
+                <p>Return to <a href="{% url 'home' %}">Home</a>.</p>
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="unauthorized-message">
+            <h2>Access Denied</h2>
+            <p>Please <a href="{% url 'login' %}">log in</a> to view the Journalist Dashboard.</p>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% comment %} list of all unapproved articles {% endcomment %}
