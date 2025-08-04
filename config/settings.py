@@ -13,16 +13,12 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 import environ
-import sys
-import django
+
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False)
 )
 
-sys.path.insert(0, os.path.abspath('..'))
-os.environ['DJANGO_SETTINGS_MODULE'] = 'news_app.settings'
-django.setup()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -154,3 +150,10 @@ API_KEY_SECRET = env("API_KEY_SECRET")
 ACCESS_TOKEN = env("ACCESS_TOKEN")
 ACCESS_TOKEN_SECRET = env("ACCESS_TOKEN_SECRET")
 BEARER_TOKEN = env("BEARER_TOKEN")
+
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx_rtd_theme',
+]
+
+html_theme = 'sphinx_rtd_theme'
